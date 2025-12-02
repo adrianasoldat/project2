@@ -3,24 +3,90 @@ title: "Tidying"
 format: html
 editor: visual
 ---
-
-## Quarto
-
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
-
-## Running Code
-
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
-
 ```{r}
-1 + 1
+#Import Data
+
+library(tidyverse)
+library(janitor)
+library(readr)
+df <- read_csv("Dataset salary 2024.csv")
+View(df)
+
 ```
 
-You can add options to executable code like this
-
 ```{r}
-#| echo: false
-2 * 2
+#Clean Column Names - makes all lowercase, removes spaces/special chars
+
+df<-df|>
+  clean_names()
+
+colnames(df)
 ```
 
-The `echo: false` option disables the printing of code (only output is displayed).
+```{r}
+#Mutate Dataset so we only have salary in USD, just skip the salary and salary currency and rename salary in usd to just salary
+
+df<-df|>
+  select(-salary,-salary_currency)|>
+  rename(salary=salary_in_usd)
+View(df)
+```
+
+
+```{r}
+#drops rows with missing value
+df<-df|>
+  drop_na(salary, experience_level, remote_ratio, company_size)
+```
+
+```{r}
+#convert categorical vars to vectors and numeric variables to numeric
+df<-df|>
+  mutate(
+    experience_level = as.factor(experience_level),
+    employment_type = as.factor(employment_type),
+    job_title = as.factor(job_title),
+    employee_residence = as.factor(employee_residence),
+    company_location = as.factor(company_location),
+    company_size = as.factor(company_size),
+    salary = as.numeric(salary),
+    remote_ratio = as.numeric(remote_ratio) / 100
+  )
+```
+
+```{r}
+#standartize the abbreviations
+df<-df|>
+  mutate(
+    employment_type = recode(employment_type,
+                             "FT" ="full-time"  ,
+                             "PT" ="part-time",
+                             "CT"="contract"
+                             ),
+    experience_level = recode(experience_level,
+                              "SE" = "Senior",
+                              "EN" = "Junior",
+                              "MI" = "Mid",
+                              "EX"="Experienced"),
+    company_size = recode(company_size,
+                          "M"= "medium",
+                          "L"="large",
+                          "S"= "small")
+    
+  )
+View(df)
+```
+
+```{r}
+#Handle outliers
+df_clean <- df |> 
+  filter(salary <= 350000)
+
+summary(df_clean$salary)
+```
+
+```{r}
+#Save as cleaned csv
+write_csv(df_clean, "data/cleaned_salary_2024.csv")
+```
+
