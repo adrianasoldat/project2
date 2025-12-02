@@ -9,3 +9,9 @@ Dataset_salary_2024 <- read_csv("Dataset salary 2024.csv")
 View(Dataset_salary_2024)
 ```
 
+```{r}
+library(readr)
+cleaned_salary_2024 <- read_csv("data/cleaned_salary_2024.csv")
+View(cleaned_salary_2024)
+```
+
