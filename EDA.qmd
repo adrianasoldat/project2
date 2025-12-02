@@ -1,0 +1,13 @@
+---
+title: "EDA"
+author: "Bre'Aria, Sofia, and Adriana"
+format: html
+editor: source
+---
+
+## EDA
+
+```{r}
+
+```
+
