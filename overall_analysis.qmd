@@ -15,3 +15,52 @@ cleaned_salary_2024 <- read_csv("data/cleaned_salary_2024.csv")
 View(cleaned_salary_2024)
 ```
 
+```{r}
+library(ggplot2)
+library(tidyverse)
+library(RColorBrewer)
+library(leaflet)
+```
+
+```{r}
+cleaned_salary_2024 |>
+  filter(company_location == "US") |>
+ggplot(aes(x = remote_ratio,
+           fill = experience_level)) +
+         geom_bar(position = "dodge") +
+  labs(x = "Remote Ratio (%)",
+       y = "Employee Count",
+       fill = "Experience Level",
+       title = "Ratio of Remote Data Developer Jobs by Experience Level in the U.S.",
+       caption = "0.0 = In Person Job\n0.5 = Hybrid Job\n1.0 = Remote Job") +
+  theme_bw() +
+  scale_fill_brewer(palette = "GnBu") +
+  scale_x_continuous(breaks = seq(0, 100, by = .5))
+```
+
+```{r}
+cleaned_salary_2024 |>
+  filter(company_location == "US") |>
+ggplot(aes(x = remote_ratio)) +
+  facet_wrap(vars(company_size)) +
+  geom_histogram(binwidth = .5, 
+                 color = "white",
+                 fill = "Pink") +
+  labs(x = "Remote Ratio",
+       y = "Employee Count",
+       title = "Count of Remote Data Developer Jobs by Company Size in the U.S.",
+       caption = "0.0 = In Person Job\n0.5 = Hybrid Job\n1.0 = Remote Job") +
+   theme_bw()
+```
+
+```{r}
+cleaned_salary_2024 |>
+  filter(company_location == "US") |>
+ggplot(aes(x = salary, y = employment_type)) +
+  geom_boxplot() + 
+  theme_classic() +
+  labs(x = "Salary (in USD)",
+       y = "Employment Type",
+       title = "Median Salary of Data Developer Jobs Based on Empolyment Type in the U.S.")
+```
+
