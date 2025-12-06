@@ -3,6 +3,7 @@ title: "Tidying"
 format: html
 editor: visual
 ---
+
 ```{r}
 #Import Data
 
@@ -31,7 +32,6 @@ df<-df|>
   rename(salary=salary_in_usd)
 View(df)
 ```
-
 
 ```{r}
 #drops rows with missing value
@@ -89,4 +89,3 @@ summary(df_clean$salary)
 #Save as cleaned csv
 write_csv(df_clean, "data/cleaned_salary_2024.csv")
 ```
-
