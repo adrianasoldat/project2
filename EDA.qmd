@@ -8,6 +8,86 @@ editor: source
 ## EDA
 
 ```{r}
+library(ggplot2)
+library(tidyverse)
+library(RColorBrewer)
+library(leaflet)
+library(janitor)
+library(readr)
+```
+
+```{r}
+#read clean data
+df <- read_csv("data/cleaned_salary_2024.csv")
+View(df)
+```
+
+```{r}
+#make exp order display in increasing order
+exp_order <- c("Junior", "Mid", "Senior", "Experienced")
+
+df <- df |>
+  mutate(
+    experience_level = factor(experience_level,
+                              levels = exp_order,
+                              ordered = TRUE)
+  )
+```
+
+
+```{r}
+#Function for summary table of by specific column
+summary <-function(col_name){
+  df |> 
+  group_by(.data[[col_name]]) |> 
+  summarise(
+    mean_salary = mean(salary),
+    median_salary = median(salary),
+    n = n(),
+    .groups = "drop"
+  )
+}
+```
+
+```{r}
+summary("experience_level")
+```
+
+```{r}
+summary("company_size")
+
+```
+
+```{r}
+#function to plot salary with any categorical variable or numeric that can be made as a factor
+salary_vs <-function(col_name){
+  df|>
+    mutate(across(all_of(col_name), as.factor))|>
+    ggplot( aes_string(x=col_name, y ="salary" ))+
+      geom_boxplot()+
+      theme_minimal()+
+      labs(title = paste("Salary by", col_name),
+           x = col_name,
+           y = "Salary (USD)")
+}
+```
+
+```{r}
+#Salary by Experience level
+salary_vs("experience_level")
+```
+
+```{r}
+#Salary by Company size
+
+salary_vs("company_size")
+
+```
+
+```{r}
+#Salary by Remote size
+
+salary_vs("remote_ratio")
 
 ```
 
