@@ -61,7 +61,8 @@ df<-df|>
     employment_type = recode(employment_type,
                              "FT" ="full-time"  ,
                              "PT" ="part-time",
-                             "CT"="contract"
+                             "CT"="contract",
+                             "FL"="freelance"
                              ),
     experience_level = recode(experience_level,
                               "SE" = "Senior",
