@@ -32,7 +32,6 @@ df<-df|>
 View(df)
 ```
 
-
 ```{r}
 #drops rows with missing value
 df<-df|>
@@ -89,4 +88,3 @@ summary(df_clean$salary)
 #Save as cleaned csv
 write_csv(df_clean, "data/cleaned_salary_2024.csv")
 ```
-
