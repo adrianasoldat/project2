@@ -73,4 +73,3 @@ ggplot(aes(x = salary, y = employment_type)) +
   )
 
 ```
-
