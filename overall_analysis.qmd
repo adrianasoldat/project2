@@ -60,4 +60,3 @@ ggplot(aes(x = salary, y = employment_type)) +
        y = "Employment Type",
        title = "Median Salary of Data Developer Jobs Based on Empolyment Type in 2024")
 ```
-
