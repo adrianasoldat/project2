@@ -4,14 +4,73 @@ format: html
 ---
 
 ```{r}
-library(readr)
-Dataset_salary_2024 <- read_csv("Dataset salary 2024.csv")
-View(Dataset_salary_2024)
+library(ggplot2)
+library(tidyverse)
+library(RColorBrewer)
+library(leaflet)
 ```
 
 ```{r}
 library(readr)
 cleaned_salary_2024 <- read_csv("data/cleaned_salary_2024.csv")
 View(cleaned_salary_2024)
+```
+
+```{r}
+#function to plot salary with any categorical variable or numeric that can be made as a factor
+salary_vs <-function(data,col_name, box_color = "skyblue", data_source = "2024 Salary Dataset"){
+  data|>
+    mutate(across(all_of(col_name), as.factor))|>
+    ggplot( aes_string(x=col_name, y ="salary" ))+
+      geom_boxplot(fill = box_color, outlier.alpha = 0.4, color = "black")+
+      theme_minimal(base_size = 14)+
+      labs(title = paste("Salary by", col_name),
+           subtitle = paste("Exploratory Analysis of", col_name, "vs Salary"),
+           x = col_name,
+           y = "Salary (USD)",
+           caption = data_source) +
+    theme(plot.titple = element_text(face = "bold", hjust = 0.5),
+          plot.subtitle = element_text(hjust = 0.5, color = "gray40"),
+          plot.caption = element_text(hjust = 1, face = "italic", size = 10))
+}
+```
+
+```{r}
+#Salary by Experience level
+salary_vs(cleaned_salary_2024, "experience_level")
+```
+
+```{r}
+#Salary by Company size
+
+salary_vs(cleaned_salary_2024, "company_size")
+```
+
+```{r}
+#Salary by Remote size
+
+salary_vs(cleaned_salary_2024, "remote_ratio")
+
+```
+
+```{r}
+library(scales)
+
+cleaned_salary_2024 |>
+ggplot(aes(x = salary, y = employment_type)) +
+  geom_boxplot(fill = "grey", color = "black", outlier.alpha = 0.4) + 
+  theme_minimal(base_size = 14) +
+  labs(x = "Salary (in USD)",
+       y = "Employment Type",
+       title = "Data Developers' Salary Distribution by Employment Type in 2024",
+       subtitle = "Boxplots show median, IQR, and distribution spread",
+       caption = "Source: 2024 Salary Dataset"
+)+
+  scale_x_continuous(labels =comma)+
+  theme(
+    plot.title = element_text(face = "bold", hjust = 1),
+    plot.subtitle = element_text(hjust = 0.5)
+  )
+
 ```
 
