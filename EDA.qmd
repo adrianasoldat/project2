@@ -38,11 +38,11 @@ summary_by <-function(col_name){
 ```
 
 ```{r}
-summary_by("experience_level")
+exp_summary<- summary_by("experience_level")
 ```
 
 ```{r}
-summary_by("company_size")
+comp_summary<- summary_by("company_size")
 
 ```
 
