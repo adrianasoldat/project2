@@ -47,39 +47,6 @@ comp_summary<- summary_by("company_size")
 ```
 
 ```{r}
-#function to plot salary with any categorical variable or numeric that can be made as a factor
-salary_vs <-function(col_name){
-  df|>
-    mutate(across(all_of(col_name), as.factor))|>
-    ggplot( aes_string(x=col_name, y ="salary" ))+
-      geom_boxplot()+
-      theme_minimal()+
-      labs(title = paste("Salary by", col_name),
-           x = col_name,
-           y = "Salary (USD)")
-}
-```
-
-```{r}
-#Salary by Experience level
-salary_vs("experience_level")
-```
-
-```{r}
-#Salary by Company size
-
-salary_vs("company_size")
-```
-
-```{r}
-#Salary by Remote size
-
-salary_vs("remote_ratio")
-
-```
-
-
-```{r}
 df |>
 ggplot(aes(x = remote_ratio,
            fill = experience_level)) +

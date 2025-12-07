@@ -29,7 +29,9 @@ salary_vs <-function(data,col_name, box_color = "skyblue", data_source = "2024 S
            x = col_name,
            y = "Salary (USD)",
            caption = data_source) +
-    theme(plot.titple = element_text(face = "bold", hjust = 0.5),
+      scale_y_continuous(labels =comma)+
+
+    theme(plot.title = element_text(face = "bold", hjust = 0.5),
           plot.subtitle = element_text(hjust = 0.5, color = "gray40"),
           plot.caption = element_text(hjust = 1, face = "italic", size = 10))
 }
