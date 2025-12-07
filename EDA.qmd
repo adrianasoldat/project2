@@ -22,22 +22,10 @@ df <- read_csv("data/cleaned_salary_2024.csv")
 View(df)
 ```
 
-```{r}
-#make exp order display in increasing order
-exp_order <- c("Junior", "Mid", "Senior", "Experienced")
-
-df <- df |>
-  mutate(
-    experience_level = factor(experience_level,
-                              levels = exp_order,
-                              ordered = TRUE)
-  )
-```
-
 
 ```{r}
 #Function for summary table of by specific column
-summary <-function(col_name){
+summary_by <-function(col_name){
   df |> 
   group_by(.data[[col_name]]) |> 
   summarise(
@@ -50,11 +38,11 @@ summary <-function(col_name){
 ```
 
 ```{r}
-summary("experience_level")
+summary_by("experience_level")
 ```
 
 ```{r}
-summary("company_size")
+summary_by("company_size")
 
 ```
 
@@ -81,7 +69,6 @@ salary_vs("experience_level")
 #Salary by Company size
 
 salary_vs("company_size")
-
 ```
 
 ```{r}
@@ -91,3 +78,32 @@ salary_vs("remote_ratio")
 
 ```
 
+
+```{r}
+df |>
+ggplot(aes(x = remote_ratio,
+           fill = experience_level)) +
+         geom_bar(position = "dodge") +
+  labs(x = "Remote Ratio",
+       y = "Employee Count",
+       fill = "Experience Level",
+       title = "Distribution of Remote Data Developer Work Ratios by Experience Level in 2024",
+       subtitle = "0.0 = In Person Job, 0.5 = Hybrid Job, 1.0 = Remote Job") +
+  theme_bw() +
+  scale_fill_brewer(palette = "GnBu") +
+  scale_x_continuous(breaks = seq(0, 100, by = .5))
+```
+
+```{r}
+df |>
+ggplot(aes(x = remote_ratio)) +
+  facet_wrap(vars(company_size)) +
+  geom_histogram(binwidth = .5, 
+                 color = "white",
+                 fill = "Pink") +
+  labs(x = "Remote Ratio",
+       y = "Employee Count",
+       title = "Remote Work Distribution by Company Size in 2024",
+       subtitle = "0.0 = In Person Job, 0.5 = Hybrid Job, 1.0 = Remote Job") +
+   theme_bw()
+```

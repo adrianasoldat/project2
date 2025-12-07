@@ -4,9 +4,10 @@ format: html
 ---
 
 ```{r}
-library(readr)
-Dataset_salary_2024 <- read_csv("Dataset salary 2024.csv")
-View(Dataset_salary_2024)
+library(ggplot2)
+library(tidyverse)
+library(RColorBrewer)
+library(leaflet)
 ```
 
 ```{r}
@@ -16,47 +17,59 @@ View(cleaned_salary_2024)
 ```
 
 ```{r}
-library(ggplot2)
-library(tidyverse)
-library(RColorBrewer)
-library(leaflet)
+#function to plot salary with any categorical variable or numeric that can be made as a factor
+salary_vs <-function(data,col_name, box_color = "skyblue", data_source = "2024 Salary Dataset"){
+  data|>
+    mutate(across(all_of(col_name), as.factor))|>
+    ggplot( aes_string(x=col_name, y ="salary" ))+
+      geom_boxplot(fill = box_color, outlier.alpha = 0.4, color = "black")+
+      theme_minimal(base_size = 14)+
+      labs(title = paste("Salary by", col_name),
+           subtitle = paste("Exploratory Analysis of", col_name, "vs Salary"),
+           x = col_name,
+           y = "Salary (USD)",
+           caption = data_source) +
+    theme(plot.titple = element_text(face = "bold", hjust = 0.5),
+          plot.subtitle = element_text(hjust = 0.5, color = "gray40"),
+          plot.caption = element_text(hjust = 1, face = "italic", size = 10))
+}
 ```
 
 ```{r}
-cleaned_salary_2024 |>
-ggplot(aes(x = remote_ratio,
-           fill = experience_level)) +
-         geom_bar(position = "dodge") +
-  labs(x = "Remote Ratio (%)",
-       y = "Employee Count",
-       fill = "Experience Level",
-       title = "Ratio of Remote Data Developer Jobs by Experience Level in 2024",
-       caption = "0.0 = In Person Job\n0.5 = Hybrid Job\n1.0 = Remote Job") +
-  theme_bw() +
-  scale_fill_brewer(palette = "GnBu") +
-  scale_x_continuous(breaks = seq(0, 100, by = .5))
+#Salary by Experience level
+salary_vs(cleaned_salary_2024, "experience_level")
 ```
 
 ```{r}
-cleaned_salary_2024 |>
-ggplot(aes(x = remote_ratio)) +
-  facet_wrap(vars(company_size)) +
-  geom_histogram(binwidth = .5, 
-                 color = "white",
-                 fill = "Pink") +
-  labs(x = "Remote Ratio",
-       y = "Employee Count",
-       title = "Count of Remote Data Developer Jobs by Company Size in 2024",
-       caption = "0.0 = In Person Job\n0.5 = Hybrid Job\n1.0 = Remote Job") +
-   theme_bw()
+#Salary by Company size
+
+salary_vs(cleaned_salary_2024, "company_size")
 ```
 
 ```{r}
+#Salary by Remote size
+
+salary_vs(cleaned_salary_2024, "remote_ratio")
+
+```
+
+```{r}
+library(scales)
+
 cleaned_salary_2024 |>
 ggplot(aes(x = salary, y = employment_type)) +
-  geom_boxplot() + 
-  theme_classic() +
+  geom_boxplot(fill = "grey", color = "black", outlier.alpha = 0.4) + 
+  theme_minimal(base_size = 14) +
   labs(x = "Salary (in USD)",
        y = "Employment Type",
-       title = "Median Salary of Data Developer Jobs Based on Empolyment Type in 2024")
+       title = "Data Developers' Salary Distribution by Employment Type in 2024",
+       subtitle = "Boxplots show median, IQR, and distribution spread",
+       caption = "Source: 2024 Salary Dataset"
+)+
+  scale_x_continuous(labels =comma)+
+  theme(
+    plot.title = element_text(face = "bold", hjust = 1),
+    plot.subtitle = element_text(hjust = 0.5)
+  )
+
 ```

@@ -81,9 +81,22 @@ View(df)
 ```{r}
 #Handle outliers
 df_clean <- df |> 
-  filter(salary <= 350000)
+  filter(salary <= 350000)|>
+  filter(work_year == 2024)
 
 summary(df_clean$salary)
+```
+
+```{r}
+#make exp order display in increasing order
+exp_order <- c("Junior", "Mid", "Senior", "Experienced")
+
+df_clean <- df_clean |>
+  mutate(
+    experience_level = factor(experience_level,
+                              levels = exp_order,
+                              ordered = TRUE)
+  )
 ```
 
 ```{r}
