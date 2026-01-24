@@ -59,6 +59,9 @@ ggplot(aes(x = remote_ratio,
   theme_bw() +
   scale_fill_brewer(palette = "GnBu") +
   scale_x_continuous(breaks = seq(0, 100, by = .5))
+
+ggsave("plot1.png", width = 10, height = 6, dpi = 300)
+
 ```
 
 ```{r}
@@ -73,4 +76,7 @@ ggplot(aes(x = remote_ratio)) +
        title = "Remote Work Distribution by Company Size in 2024",
        subtitle = "0.0 = In Person Job, 0.5 = Hybrid Job, 1.0 = Remote Job") +
    theme_bw()
+
+ggsave("plot2.png", width = 10, height = 6, dpi = 300)
+
 ```

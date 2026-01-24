@@ -49,18 +49,24 @@ salary_vs <-function(data,col_name, box_color = "skyblue", data_source = "2024 S
 ```{r}
 #Salary by Experience level
 salary_vs(cleaned_salary_2024, "experience_level")
+ggsave("plot3.png", width = 10, height = 6, dpi = 300)
+
 ```
 
 ```{r}
 #Salary by Company size
 
 salary_vs(cleaned_salary_2024, "company_size")
+ggsave("plot4.png", width = 10, height = 6, dpi = 300)
+
 ```
 
 ```{r}
 #Salary by Remote size
 
 salary_vs(cleaned_salary_2024, "remote_ratio")
+ggsave("plot5.png", width = 10, height = 6, dpi = 300)
+
 
 ```
 
@@ -81,5 +87,7 @@ ggplot(aes(x = salary, y = employment_type)) +
     plot.title = element_text(face = "bold", hjust = 1),
     plot.subtitle = element_text(hjust = 0.5)
   )
+ggsave("plot6.png", width = 10, height = 6, dpi = 300)
+
 
 ```
